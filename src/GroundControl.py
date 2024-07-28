@@ -20,8 +20,6 @@ if __name__ == "__main__":
     # define ros threads
     rosSingleDroneThread = ros_node.SingleDroneRosThread(ui)
     rosSingleDroneThread.start()
-    rosWaterSampleThread = ros_node.WaterSampleRosThread(ui)
-    rosWaterSampleThread.start()
     
     # show the window
     WaterSamplingGroundControlStation.show()

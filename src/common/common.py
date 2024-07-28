@@ -34,7 +34,8 @@ class CommonData(): # store the data from the ROS nodes
             return
         self.current_imu.roll = euler[0]
         self.current_imu.pitch = euler[1]
-        self.current_imu.yaw = euler[2]
+        # convert enu to ned
+        self.current_imu.yaw = (90 - euler[2]) % 360
         self.lock.unlock()
         return
   

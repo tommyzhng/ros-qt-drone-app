@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WaterSamplingGroundControlStation</class>
+ <widget class="QTabWidget" name="WaterSamplingGroundControlStation">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1341</width>
+    <height>857</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TabWidget</string>
+  </property>
+  <property name="currentIndex">
+   <number>1</number>
+  </property>
+  <widget class="QWidget" name="Initialization_Tab">
+   <property name="font">
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <attribute name="title">
+    <string>Initilization</string>
+   </attribute>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>941</width>
+      <height>761</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="InitVLayout">
+     <item>
+      <widget class="QLabel" name="InitTitle">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>30</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>UAV INITIALIZATION</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="Welcome">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Welcome to the Water Sampling Ground Control Station! Here you will be able to set up, monitor and fly the UAV autonomously or manually. To fly, please start ROSCore, MAVROS and OFFBOARD for communication and control with UAV&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ROSCoreInfo">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ROS Core &lt;/p&gt;&lt;p&gt;Roscore is a collection of nodes and programs that make up the pre-requisites of the robot operating system. You must have one and only one roscore running to be able to do any communication between nodes, and therefore communicate and fly the UAV [1]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="StartROSCore">
+       <property name="text">
+        <string>Start ROS Core</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="MAVROSInfo">
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MAVROS&lt;/p&gt;&lt;p&gt;MAVROS is a package that provides communication drivers for various autopilots with the MAVLink protocol. It additionally provides the UDP MAVLink bridge for ground control stations such as QGroundControl. We harness the same communication to generate this ground control station.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="StartMAVROS">
+       <property name="text">
+        <string>Start MAVROS Communication</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="OFFBOARDInfo">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;OFFBOARD&lt;/p&gt;&lt;p&gt;Offboard mode is a function supported by all Pixhawk flight controllers except the 3DR Pixhawk1 [3]. It allows the vehicle to obey position, velocity, accleeration, attitude, altitude rates or thrust setpoints provided by an external source to the flight stack such as a companion computer. In this case we use Jetson Nano to run the flight controller and communicate the data over the MAVLink protocal. [4]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="StartOffboard">
+       <property name="text">
+        <string>Start OFFBOARD MODE</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="AutonomousFlightMode_Tab">
+   <attribute name="title">
+    <string>Autonomous Flight</string>
+   </attribute>
+   <widget class="QLabel" name="AutonomousTitle">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>15</y>
+      <width>481</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>30</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Autonomous Flight</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>80</y>
+      <width>301</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="GPSDataLayout">
+     <item>
+      <widget class="QLabel" name="GPSLabel">
+       <property name="text">
+        <string>Global Position</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="GPSHLayout">
+       <item>
+        <widget class="QLabel" name="LatLabel">
+         <property name="text">
+          <string>Lateral</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="LongLabel">
+         <property name="text">
+          <string>Longitudinal</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="AltLabel">
+         <property name="text">
+          <string>Altitude (MSL)</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="GPS_DISP">
+       <item>
+        <widget class="QLCDNumber" name="LatGPS_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="LongGPS_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="AltGPS_DISP"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>270</y>
+      <width>291</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="IMULayout">
+     <item>
+      <widget class="QLabel" name="IMULabel">
+       <property name="text">
+        <string>IMU (Orientation °)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="IMUHLayout">
+       <item>
+        <widget class="QLabel" name="XLabel0">
+         <property name="text">
+          <string>Roll</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="YLabel0">
+         <property name="text">
+          <string>Pitch</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="ZLabel0">
+         <property name="text">
+          <string>Yaw</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="IMU_DISP">
+       <item>
+        <widget class="QLCDNumber" name="X_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="Y_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="Z_DISP">
+         <property name="digitCount">
+          <number>6</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_5">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>270</y>
+      <width>301</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="VelVLayout">
+     <item>
+      <widget class="QLabel" name="VelLabel">
+       <property name="text">
+        <string>Velocity</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="VelHLabel">
+       <item>
+        <widget class="QLabel" name="U_VEL_Label">
+         <property name="text">
+          <string>U</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="V_VEL_Label">
+         <property name="text">
+          <string>V</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="W_VEL_Label">
+         <property name="text">
+          <string>W</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="Vel_DISP">
+       <item>
+        <widget class="QLCDNumber" name="U_Vel_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="V_Vel_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="W_Vel_DISP"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_6">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>170</y>
+      <width>161</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="FlightTimeVLayout">
+     <item>
+      <widget class="QLabel" name="FlightTimeLabel">
+       <property name="text">
+        <string>Flight Time</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="FlightTimeHLabel">
+       <item>
+        <widget class="QLabel" name="Min_Label">
+         <property name="text">
+          <string>Min</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="Sec_Label">
+         <property name="text">
+          <string>Secs</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="FlightTime_DISP">
+       <item>
+        <widget class="QLCDNumber" name="Min_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="Sec_DISP"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTextBrowser" name="Logging">
+    <property name="geometry">
+     <rect>
+      <x>1040</x>
+      <y>80</y>
+      <width>291</width>
+      <height>381</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="FlightLogTitle">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>20</y>
+      <width>241</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>30</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Flight Log</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="EmergencyStop">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>270</y>
+      <width>161</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Emergency Stop
+(Kills Motors)</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_14">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>80</y>
+      <width>291</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="GPSDataLayout_3">
+     <item>
+      <widget class="QLabel" name="GPSLabel_2">
+       <property name="text">
+        <string>Relative Position</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="GPSHLayout_2">
+       <item>
+        <widget class="QLabel" name="LatLabel_2">
+         <property name="text">
+          <string>X</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="LongLabel_2">
+         <property name="text">
+          <string>Y</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="AltLabel_2">
+         <property name="text">
+          <string>Altitude (AGL)</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="GPS_DISP_2">
+       <item>
+        <widget class="QLCDNumber" name="RelX_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="RelY_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="AGL_DISP"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>80</y>
+      <width>161</width>
+      <height>77</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="BatLayout">
+     <item row="1" column="0" colspan="2">
+      <widget class="QProgressBar" name="BatInd">
+       <property name="value">
+        <number>20</number>
+       </property>
+       <property name="textVisible">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="Voltage_Label">
+       <property name="text">
+        <string>Voltage:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLCDNumber" name="VOLT_DISP"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>80</y>
+      <width>171</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="StateConnected">
+       <property name="styleSheet">
+        <string notr="true">color : red</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>DISCONNECTED</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="StateARM">
+       <property name="styleSheet">
+        <string notr="true">color : green</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>DISARMED</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="StateMode">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>MODE</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>550</y>
+      <width>301</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetNoConstraint</enum>
+     </property>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="DISARM">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Disarm</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPushButton" name="Takeoff">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Takeoff (m):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="QPushButton" name="Land">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Land</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="ARM">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Arm</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="TakeoffHeight">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>2.0</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>550</y>
+      <width>201</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
+     </property>
+     <item row="5" column="1">
+      <widget class="QPushButton" name="HOLD">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>STOP (Hold Mode)</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>Esc</string>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="POSCTL">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>POSCTL</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="OFFBOARD">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>OFFBOARD</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="AutonomousTitle_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>484</y>
+      <width>551</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>30</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>MavROS State Machine</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="SendPositionUAV">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>760</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send New Position</string>
+    </property>
+    <property name="shortcut">
+     <string>Return</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="GetCurrentPositionUAV">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>760</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Get Current Position</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_15">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>550</y>
+      <width>421</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="DesiredFlightLayout">
+     <item>
+      <widget class="QLabel" name="DesiredFlightCoordinates">
+       <property name="text">
+        <string>Desired Flight Coordinates</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="FlightHLayout">
+       <item>
+        <widget class="QLabel" name="XLabel1">
+         <property name="text">
+          <string>X</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="YLabel1">
+         <property name="text">
+          <string>Y</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="ZLabel1">
+         <property name="text">
+          <string>Z</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="ZLabel1_3">
+         <property name="text">
+          <string>Yaw</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="FlightHLayout1">
+       <item>
+        <widget class="QLineEdit" name="XPositionUAV">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="YPositionUAV"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="ZPositionUAV"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="YAWUAV"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="AutonomousTitle_2">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>480</y>
+      <width>671</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>30</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Custom Application Controls</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>540</y>
+      <width>20</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="References_Tab">
+   <attribute name="title">
+    <string>References</string>
+   </attribute>
+   <widget class="QLabel" name="ReferencesTitle">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>151</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>References</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ReferencesInfo">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>80</y>
+      <width>491</width>
+      <height>661</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[1] https://wiki.ros.org/roscore&lt;/p&gt;&lt;p&gt;[2] https://wiki.ros.org/mavros&lt;/p&gt;&lt;p&gt;[3] https://docs.px4.io/main/en/flight_controller/pixhawk.html&lt;/p&gt;&lt;p&gt;[4] https://docs.px4.io/main/en/flight_modes/offboard.html&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
