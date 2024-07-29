@@ -1,6 +1,6 @@
 # ROS-QT-Drone-App 
 
-Boilerplate PyQt5 GUI code for PX4-ROS Research
+Boilerplate PyQt5 GUI code for PX4-ROS Research, sourced from a slung payload GUI that I helped build at the FSC lab ([source](https://github.com/LonghaoQian/slung-payload-delivery-GS-GUI))
 
 GUI Displays:
 - IMU data
@@ -17,3 +17,5 @@ Default Controls:
 
 Everytime you make changes to the GUI in Qt Designer, generate the python file with  
 ```pyuic5 -x drone_app.ui -o GUI_drone_app.py ```
+
+
