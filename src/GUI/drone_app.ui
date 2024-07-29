@@ -624,22 +624,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QPushButton" name="Takeoff">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Takeoff (m):</string>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="0" colspan="2">
       <widget class="QPushButton" name="Land">
        <property name="enabled">
@@ -669,22 +653,6 @@
        </property>
        <property name="text">
         <string>Arm</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="TakeoffHeight">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>2.0</string>
        </property>
       </widget>
      </item>
@@ -794,7 +762,7 @@
    <widget class="QPushButton" name="SendPositionUAV">
     <property name="geometry">
      <rect>
-      <x>860</x>
+      <x>1130</x>
       <y>760</y>
       <width>201</width>
       <height>31</height>
@@ -810,7 +778,7 @@
    <widget class="QPushButton" name="GetCurrentPositionUAV">
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>910</x>
       <y>760</y>
       <width>201</width>
       <height>31</height>
@@ -823,7 +791,7 @@
    <widget class="QWidget" name="verticalLayoutWidget_15">
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>910</x>
       <y>550</y>
       <width>421</width>
       <height>201</height>
@@ -833,7 +801,7 @@
      <item>
       <widget class="QLabel" name="DesiredFlightCoordinates">
        <property name="text">
-        <string>Desired Flight Coordinates</string>
+        <string>Custom Flight Coordinates</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -925,6 +893,92 @@
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_5">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>630</y>
+      <width>261</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_4">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
+     </property>
+     <item row="4" column="3">
+      <widget class="QLineEdit" name="TakeoffHeight">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>50</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="3">
+      <widget class="QPushButton" name="POSCTL_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Freefall</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1" colspan="2">
+      <widget class="QPushButton" name="Takeoff">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Go to Drop Height:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="AutonomousTitle_4">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>570</y>
+      <width>221</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Failsafe State Machine</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
