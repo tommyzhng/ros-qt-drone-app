@@ -15,6 +15,8 @@ Default Controls:
 - Mode switcher between Offboard and POSCTL
 - Position setpoints
 
+Examples of potential applications are in the branches.
+
 Everytime you make changes to the GUI in Qt Designer, generate the python file with  
 ```pyuic5 -x drone_app.ui -o GUI_drone_app.py ```
 
