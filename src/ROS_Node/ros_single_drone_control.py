@@ -10,6 +10,7 @@ import json
 import math
 from std_msgs.msg import String
 from nav_msgs.msg import Odometry
+from std_msgs.msg import Float32
 
 class SingleDroneRosNode(QObject):
     ## define signals
@@ -32,6 +33,7 @@ class SingleDroneRosNode(QObject):
 
         # vrs state machine publishers
         self.coords_pub = rospy.Publisher('/vrs_failsafe/setpoint_position', PoseStamped, queue_size=1)
+        self.vel_pub = rospy.Publisher('/vrs_failsafe/setpoint_drop_vel', Float32, queue_size=1)
         self.state_pub = rospy.Publisher('/vrs_failsafe/state', String, queue_size=1)
 
         # other
@@ -72,6 +74,10 @@ class SingleDroneRosNode(QObject):
         pos_targ.pose.orientation.z = yaw
         self.coords_pub.publish(pos_targ)
         self.state_pub.publish(String("posSetpoint"))
+
+    def publish_drop_velocity(self, vel):
+        self.vel_pub.publish(vel)
+        self.state_pub.publish(String("dropVelSetpoint"))
 
     # main loop of ros node
     def run(self):
@@ -122,6 +128,7 @@ class SingleDroneRosThread:
 
         # vrs testing
         self.ui.btnSetHeight.clicked.connect(lambda: self.send_set_height_request(float(self.ui.tbDropHeight.text())))
+        self.ui.btnDropVelocity.clicked.connect(lambda: self.send_drop_velocity(-float(self.ui.tbDropVelocity.text())))
         self.ui.btnFreefall.clicked.connect(lambda: self.ros_object.state_pub.publish(String("freefall")))
 
     # update GUI data
@@ -213,6 +220,9 @@ class SingleDroneRosThread:
         if arm_response.result == 0:
             self.ros_object.publish_coordinates(self.local_pos_msg.x, self.local_pos_msg.y, req_altitude, (90-self.imu_msg.yaw))
             print(f"Drop request sent at {req_altitude} meters")
+
+    def send_drop_velocity(self, vel):
+        self.ros_object.publish_drop_velocity(vel)
 
     def send_coordinates(self):
         # if text is inalid, warn user
