@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMessageBox
 import common
 from sensor_msgs.msg import Imu, NavSatFix, BatteryState
 from mavros_msgs.srv import CommandLong, SetMode
-from mavros_msgs.msg import State, ActuatorControl
+from mavros_msgs.msg import State, ActuatorControl, AttitudeTarget
 from geometry_msgs.msg import PoseStamped
 import json
 import math
@@ -25,13 +25,17 @@ class SingleDroneRosNode(QObject):
         self.odom_local_sub = rospy.Subscriber('mavros/local_position/odom', Odometry, callback=self.odom_local_sub)
         self.bat_sub = rospy.Subscriber('mavros/battery', BatteryState, callback=self.bat_sub)
         self.mavros_status_sub = rospy.Subscriber('mavros/state', State, callback=self.mavros_status_sub)
+        self.state_machine_loopback = rospy.Subscriber('/vrs_failsafe/state_machine_loopback', String, callback=self.state_machine_loopback_cb)
+
 
         # define publishers / services
         self.arming_service = rospy.ServiceProxy('mavros/cmd/command', CommandLong)
         self.land_service = rospy.ServiceProxy('mavros/cmd/command', CommandLong)
         self.set_mode_service = rospy.ServiceProxy('mavros/set_mode', SetMode)
 
-        # vrs state machine publishers
+        # vrs state machine 
+        self.throttle_sp = rospy.Subscriber('/mavros/setpoint_raw/attitude', AttitudeTarget, self.throttle_sp_cb)
+        self.servo_pwm_sp = rospy.Subscriber('/mavros/actuator_control', ActuatorControl, self.servo_pwm_sp_cb)
         self.coords_pub = rospy.Publisher('/vrs_failsafe/setpoint_position', PoseStamped, queue_size=1)
         self.vel_pub = rospy.Publisher('/vrs_failsafe/setpoint_drop_vel', Float32, queue_size=1)
         self.state_pub = rospy.Publisher('/vrs_failsafe/state', String, queue_size=1)
@@ -63,6 +67,13 @@ class SingleDroneRosNode(QObject):
         self.data_struct.update_bat(msg.percentage, msg.voltage)
     def mavros_status_sub(self, msg):
         self.data_struct.update_state(msg.connected, msg.armed, msg.manual_input, msg.mode, msg.header.stamp.secs)
+    # vrs state machine
+    def throttle_sp_cb(self, msg):
+        self.data_struct.update_throttle_setpoint(msg.thrust)
+    def servo_pwm_sp_cb(self, msg):
+        self.data_struct.update_servo_pwm(msg.controls[5])
+    def state_machine_loopback_cb(self, msg):
+        self.data_struct.update_state_machine(msg.data)
 
     ## define publisher functions###
     def publish_coordinates(self, x, y, z, yaw):
@@ -82,6 +93,9 @@ class SingleDroneRosNode(QObject):
     def publish_servo_setpoint(self, angle):
         self.tilt_angle_pub.publish(angle)
         self.state_pub.publish(String("posSetpoint"))
+
+    def publish_freefall(self):
+        self.state_pub.publish(String("freefall"))
 
     # main loop of ros node
     def run(self):
@@ -133,7 +147,7 @@ class SingleDroneRosThread:
         # vrs testing
         self.ui.btnSetHeight.clicked.connect(lambda: self.send_set_height_request(float(self.ui.tbDropHeight.text())))
         self.ui.btnDropVelocity.clicked.connect(lambda: self.send_drop_velocity(-float(self.ui.tbDropVelocity.text())))
-        self.ui.btnFreefall.clicked.connect(lambda: self.ros_object.state_pub.publish(String("freefall")))
+        self.ui.btnFreefall.clicked.connect(lambda: self.send_freefall())
         self.ui.btnTiltAngle.clicked.connect(lambda: self.send_tilt_angle(float(self.ui.tbTiltAngle.text())))
 
     # update GUI data
@@ -148,6 +162,9 @@ class SingleDroneRosThread:
         vel_msg = self.ros_object.data_struct.current_vel
         bat_msg = self.ros_object.data_struct.current_battery_status
         state_msg = self.ros_object.data_struct.current_state
+        throttle_msg = self.ros_object.data_struct.throttle_setpoint
+        servo_msg = self.ros_object.data_struct.servo_pwm
+        vrs_state_msg = self.ros_object.data_struct.current_vrs_state
         self.lock.unlock()
 
         # accelerometer data
@@ -174,6 +191,11 @@ class SingleDroneRosThread:
         self.ui.StateConnected.setText("Connected" if state_msg.connected else "Disconnected")
         self.ui.StateConnected.setStyleSheet("color: green" if state_msg.connected else "color: red")
         self.ui.StateMode.setText(state_msg.mode)
+
+        # vrs state machine
+        self.ui.throttle_DISP.display("{:.2f}".format(throttle_msg, 2))
+        self.ui.Tilt_DISP.display("{:.0f}".format(servo_msg))
+        self.ui.StateVRS.setText(vrs_state_msg)
 
         # misc data
         if bat_msg: # takes long to initialize
@@ -219,6 +241,8 @@ class SingleDroneRosThread:
         response = self.ros_object.set_mode_service(custom_mode=mode)
         print(response)
 
+    # vrs state machine
+
     def send_set_height_request(self, req_altitude):
         arm_response = self.send_arming_request(True, 0)
         # if armed takeoff
@@ -228,6 +252,9 @@ class SingleDroneRosThread:
 
     def send_drop_velocity(self, vel):
         self.ros_object.publish_drop_velocity(vel)
+    
+    def send_freefall(self):
+        self.ros_object.publish_freefall()
 
     def send_tilt_angle(self, angle):
         self.ros_object.publish_servo_setpoint(angle)

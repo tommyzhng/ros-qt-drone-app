@@ -528,8 +528,8 @@
      <rect>
       <x>840</x>
       <y>80</y>
-      <width>171</width>
-      <height>181</height>
+      <width>181</width>
+      <height>261</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -584,6 +584,25 @@
        </property>
        <property name="text">
         <string>MODE</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="StateVRS">
+       <property name="styleSheet">
+        <string notr="true">color : blue</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>STATE</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1036,6 +1055,56 @@
         <string>Tilt Angle</string>
        </property>
       </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_7">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>350</y>
+      <width>361</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="IMULayout_2">
+     <item>
+      <widget class="QLabel" name="lblFailsafeController">
+       <property name="text">
+        <string>Failsafe Controller</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="IMUHLayout_2">
+       <item>
+        <widget class="QLabel" name="lblTiltPWM">
+         <property name="text">
+          <string>Tilt PWM</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblThrottle">
+         <property name="text">
+          <string>Throttle</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="IMU_DISP_2">
+       <item>
+        <widget class="QLCDNumber" name="Tilt_DISP"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="throttle_DISP"/>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>

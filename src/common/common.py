@@ -21,9 +21,10 @@ class CommonData(): # store the data from the ROS nodes
         self.current_attitude_target = ros_common.AttitudeTarget()
         self.indoor_mode = False
 
-        # water sampling
-        self.encoder_raw = ros_common.Vector3()
-        self.payload_pos = ros_common.Vector3()
+        # vrs state machine
+        self.throttle_setpoint = 0
+        self.servo_pwm = 0
+        self.current_vrs_state = None
 
         self.lock = QMutex()
 
@@ -116,26 +117,27 @@ class CommonData(): # store the data from the ROS nodes
         self.lock.unlock()
         return
     
-    ## water sampling tab
-
-    def update_encoder_raw(self, x, y, z):
+    ## vrs
+    def update_throttle_setpoint(self, throttle_setpoint):
         if not self.lock.tryLock():
             return
-        self.encoder_raw.x = x
-        self.encoder_raw.y = y
-        self.encoder_raw.z = z
+        self.throttle_setpoint = throttle_setpoint
         self.lock.unlock()
         return
     
-    def update_payload_pos(self, x, y, z):
+    def update_servo_pwm(self, servo_pwm):
         if not self.lock.tryLock():
             return
-        self.payload_pos.x = x
-        self.payload_pos.y = y
-        self.payload_pos.z = z
+        self.servo_pwm = servo_pwm
         self.lock.unlock()
         return
-        
+    
+    def update_state_machine(self, cur_state):
+        if not self.lock.tryLock():
+            return
+        self.current_vrs_state = cur_state
+        self.lock.unlock()
+        return
     
 
     
