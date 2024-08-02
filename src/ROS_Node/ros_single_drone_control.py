@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMessageBox
 import common
 from sensor_msgs.msg import Imu, NavSatFix, BatteryState
 from mavros_msgs.srv import CommandLong, SetMode
-from mavros_msgs.msg import State, PositionTarget
+from mavros_msgs.msg import State, ActuatorControl
 from geometry_msgs.msg import PoseStamped
 import json
 import math
@@ -35,7 +35,7 @@ class SingleDroneRosNode(QObject):
         self.coords_pub = rospy.Publisher('/vrs_failsafe/setpoint_position', PoseStamped, queue_size=1)
         self.vel_pub = rospy.Publisher('/vrs_failsafe/setpoint_drop_vel', Float32, queue_size=1)
         self.state_pub = rospy.Publisher('/vrs_failsafe/state', String, queue_size=1)
-
+        self.tilt_angle_pub = rospy.Publisher('vrs_failsafe/gui_servo_setpoint', Float32, queue_size=1)
         # other
         self.rate = rospy.Rate(15)
 
@@ -78,6 +78,10 @@ class SingleDroneRosNode(QObject):
     def publish_drop_velocity(self, vel):
         self.vel_pub.publish(vel)
         self.state_pub.publish(String("dropVelSetpoint"))
+
+    def publish_servo_setpoint(self, angle):
+        self.tilt_angle_pub.publish(angle)
+        self.state_pub.publish(String("posSetpoint"))
 
     # main loop of ros node
     def run(self):
@@ -130,6 +134,7 @@ class SingleDroneRosThread:
         self.ui.btnSetHeight.clicked.connect(lambda: self.send_set_height_request(float(self.ui.tbDropHeight.text())))
         self.ui.btnDropVelocity.clicked.connect(lambda: self.send_drop_velocity(-float(self.ui.tbDropVelocity.text())))
         self.ui.btnFreefall.clicked.connect(lambda: self.ros_object.state_pub.publish(String("freefall")))
+        self.ui.btnTiltAngle.clicked.connect(lambda: self.send_tilt_angle(float(self.ui.tbTiltAngle.text())))
 
     # update GUI data
     def update_gui_data(self):
@@ -223,6 +228,9 @@ class SingleDroneRosThread:
 
     def send_drop_velocity(self, vel):
         self.ros_object.publish_drop_velocity(vel)
+
+    def send_tilt_angle(self, angle):
+        self.ros_object.publish_servo_setpoint(angle)
 
     def send_coordinates(self):
         # if text is inalid, warn user

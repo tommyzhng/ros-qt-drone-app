@@ -908,8 +908,25 @@
      <property name="sizeConstraint">
       <enum>QLayout::SetMinimumSize</enum>
      </property>
-     <item row="7" column="1" colspan="2">
-      <widget class="QPushButton" name="btnDropVelocity">
+     <item row="1" column="1" colspan="3">
+      <widget class="QLabel" name="AutonomousTitle_4">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Failsafe Testing State Machine</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="3">
+      <widget class="QLineEdit" name="tbDropHeight">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -920,7 +937,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Drop at Speed:</string>
+        <string>50</string>
        </property>
       </widget>
      </item>
@@ -937,6 +954,22 @@
        </property>
        <property name="text">
         <string>Freefall</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1" colspan="2">
+      <widget class="QPushButton" name="btnDropVelocity">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Drop at Speed:</string>
        </property>
       </widget>
      </item>
@@ -972,8 +1005,8 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="3">
-      <widget class="QLineEdit" name="tbDropHeight">
+     <item row="8" column="3">
+      <widget class="QLineEdit" name="tbTiltAngle">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -984,24 +1017,23 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>50</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="3">
-      <widget class="QLabel" name="AutonomousTitle_4">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
+     <item row="8" column="1" colspan="2">
+      <widget class="QPushButton" name="btnTiltAngle">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="text">
-        <string>Failsafe Testing State Machine</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <string>Tilt Angle</string>
        </property>
       </widget>
      </item>
