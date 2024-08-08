@@ -6,6 +6,7 @@ from sensor_msgs.msg import Imu, NavSatFix, BatteryState
 from mavros_msgs.srv import CommandLong, SetMode
 from mavros_msgs.msg import State, ActuatorControl, AttitudeTarget
 from geometry_msgs.msg import PoseStamped
+from geographic_msgs.msg import GeoPointStamped
 import json
 import math
 from std_msgs.msg import String
@@ -40,6 +41,8 @@ class SingleDroneRosNode(QObject):
         self.vel_pub = rospy.Publisher('/vrs_failsafe/setpoint_drop_vel', Float32, queue_size=1)
         self.state_pub = rospy.Publisher('/vrs_failsafe/state', String, queue_size=1)
         self.tilt_angle_pub = rospy.Publisher('vrs_failsafe/gui_servo_setpoint', Float32, queue_size=1)
+        self.reset_ekf_service = rospy.Publisher('mavros/global_position/set_gp_origin', GeoPointStamped, queue_size=1)
+
         # other
         self.rate = rospy.Rate(15)
 
@@ -141,8 +144,8 @@ class SingleDroneRosThread:
         self.ui.EmergencyStop.clicked.connect(lambda: self.send_arming_request(False, 21196))
 
         self.ui.OFFBOARD.clicked.connect(lambda: self.switch_flight_mode("OFFBOARD"))
-        self.ui.POSCTL.clicked.connect(lambda: self.switch_flight_mode("POSCTL"))
         self.ui.HOLD.clicked.connect(lambda: self.switch_flight_mode("AUTO.LOITER"))
+        self.ui.RESET_ORIGIN.clicked.connect(lambda: self.reset_ekf_origin())
 
         # vrs testing
         self.ui.btnSetHeight.clicked.connect(lambda: self.send_set_height_request(float(self.ui.tbDropHeight.text())))
@@ -157,7 +160,7 @@ class SingleDroneRosThread:
             return
         # store to local variables for fast lock release
         self.imu_msg = self.ros_object.data_struct.current_imu
-        global_pos_msg = self.ros_object.data_struct.current_global_pos
+        self.global_pos_msg = self.ros_object.data_struct.current_global_pos
         self.local_pos_msg = self.ros_object.data_struct.current_local_pos
         vel_msg = self.ros_object.data_struct.current_vel
         bat_msg = self.ros_object.data_struct.current_battery_status
@@ -173,9 +176,9 @@ class SingleDroneRosThread:
         self.ui.Z_DISP.display("{:.2f}".format(self.imu_msg.yaw, 2))
 
         # global & local position data
-        self.ui.LatGPS_DISP.display("{:.2f}".format(global_pos_msg.latitude, 2))
-        self.ui.LongGPS_DISP.display("{:.2f}".format(global_pos_msg.longitude, 2))
-        self.ui.AltGPS_DISP.display("{:.2f}".format(global_pos_msg.altitude, 2))
+        self.ui.LatGPS_DISP.display("{:.2f}".format(self.global_pos_msg.latitude, 2))
+        self.ui.LongGPS_DISP.display("{:.2f}".format(self.global_pos_msg.longitude, 2))
+        self.ui.AltGPS_DISP.display("{:.2f}".format(self.global_pos_msg.altitude, 2))
         self.ui.RelX_DISP.display("{:.2f}".format(self.local_pos_msg.x, 2))
         self.ui.RelY_DISP.display("{:.2f}".format(self.local_pos_msg.y, 2))
         self.ui.AGL_DISP.display("{:.2f}".format(self.local_pos_msg.z, 2))
@@ -240,6 +243,15 @@ class SingleDroneRosThread:
     def switch_flight_mode(self, mode):
         response = self.ros_object.set_mode_service(custom_mode=mode)
         print(response)
+
+    def reset_ekf_origin(self):
+        originMsg = GeoPointStamped()
+        originMsg.header.stamp = rospy.Time.now()
+        originMsg.position.latitude = self.global_pos_msg.latitude
+        originMsg.position.longitude = self.global_pos_msg.longitude
+        originMsg.position.altitude = self.global_pos_msg.altitude
+        self.ros_object.reset_ekf_service.publish(originMsg)
+        print("EKF origin reset")
 
     # vrs state machine
 
