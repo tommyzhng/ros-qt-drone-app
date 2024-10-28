@@ -1,19 +1,13 @@
-# ROS-QT-Drone-App 
+# ROS-QT-Drone-App - VRS Failsafe Application
 
-Boilerplate PyQt5 GUI code for PX4-ROS Research
+Applied to vortex ring state experimental research for summer research in 2024 at the UTIAS FSC-Lab
 
-GUI Displays:
-- IMU data
-- Local pos
-- Local velocity
-- Global pos
-- Voltage
-- Flight Time
+Features in this application
+* Position control
+* Velocity descent control
+* Freefall (set accel to -9.81 in /mavros/setpoint_raw/local)
+* Custom state machine for failsafe controller
+* Emergency stop all motors
 
-Default Controls:
-- MavROS State Machine (Arm, Disarm, Takeoff, Land)
-- Mode switcher between Offboard and POSCTL
-- Position setpoints
-
-Everytime you make changes to the GUI in Qt Designer, generate the python file with  
-```pyuic5 -x drone_app.ui -o GUI_drone_app.py ```
+## License
+This project is licensed under a Proprietary License. You are not permitted to copy, distribute, or modify this software without express permission from the author.
