@@ -9,5 +9,3 @@ Features in this application
 * Custom state machine for failsafe controller
 * Emergency stop all motors
 
-## License
-This project is licensed under a Proprietary License. You are not permitted to copy, distribute, or modify this software without express permission from the author.

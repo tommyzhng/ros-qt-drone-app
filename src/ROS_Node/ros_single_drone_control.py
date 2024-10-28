@@ -36,7 +36,7 @@ class SingleDroneRosNode(QObject):
 
         # vrs state machine 
         self.throttle_sp = rospy.Subscriber('/mavros/setpoint_raw/attitude', AttitudeTarget, self.throttle_sp_cb)
-        self.servo_pwm_sp = rospy.Subscriber('/mavros/actuator_control', ActuatorControl, self.servo_pwm_sp_cb)
+        self.servo_pwm_sp = rospy.Subscriber('/mavross/actuator_control', ActuatorControl, self.servo_pwm_sp_cb)
         self.coords_pub = rospy.Publisher('/vrs_failsafe/setpoint_position', PoseStamped, queue_size=1)
         self.vel_pub = rospy.Publisher('/vrs_failsafe/setpoint_drop_vel', Float32, queue_size=1)
         self.state_pub = rospy.Publisher('/vrs_failsafe/state', String, queue_size=1)
@@ -74,7 +74,7 @@ class SingleDroneRosNode(QObject):
     def throttle_sp_cb(self, msg):
         self.data_struct.update_throttle_setpoint(msg.thrust)
     def servo_pwm_sp_cb(self, msg):
-        self.data_struct.update_servo_pwm(msg.controls[5])
+        self.data_struct.update_servo_pwm(msg.controls[0])
     def state_machine_loopback_cb(self, msg):
         self.data_struct.update_state_machine(msg.data)
 
@@ -99,6 +99,9 @@ class SingleDroneRosNode(QObject):
 
     def publish_freefall(self):
         self.state_pub.publish(String("freefall"))
+    
+    def activate_controller(self):
+        self.state_pub.publish(String("vrsFailsafe"))
 
     # main loop of ros node
     def run(self):
@@ -144,7 +147,7 @@ class SingleDroneRosThread:
         self.ui.EmergencyStop.clicked.connect(lambda: self.send_arming_request(False, 21196))
 
         self.ui.OFFBOARD.clicked.connect(lambda: self.switch_flight_mode("OFFBOARD"))
-        self.ui.HOLD.clicked.connect(lambda: self.switch_flight_mode("AUTO.LOITER"))
+        self.ui.HOLD.clicked.connect(lambda: self.send_drop_velocity(0))
         self.ui.RESET_ORIGIN.clicked.connect(lambda: self.reset_ekf_origin())
 
         # vrs testing
@@ -152,6 +155,7 @@ class SingleDroneRosThread:
         self.ui.btnDropVelocity.clicked.connect(lambda: self.send_drop_velocity(-float(self.ui.tbDropVelocity.text())))
         self.ui.btnFreefall.clicked.connect(lambda: self.send_freefall())
         self.ui.btnTiltAngle.clicked.connect(lambda: self.send_tilt_angle(float(self.ui.tbTiltAngle.text())))
+        self.ui.btnRecovery.clicked.connect(lambda: self.send_recovery())
 
     # update GUI data
     def update_gui_data(self):
@@ -197,7 +201,7 @@ class SingleDroneRosThread:
 
         # vrs state machine
         self.ui.throttle_DISP.display("{:.2f}".format(throttle_msg, 2))
-        self.ui.Tilt_DISP.display("{:.0f}".format(servo_msg))
+        self.ui.Tilt_DISP.display("{:.0f}".format(servo_msg*-45))
         self.ui.StateVRS.setText(vrs_state_msg)
 
         # misc data
@@ -270,6 +274,9 @@ class SingleDroneRosThread:
 
     def send_tilt_angle(self, angle):
         self.ros_object.publish_servo_setpoint(angle)
+
+    def send_recovery(self):
+        self.ros_object.activate_controller()
 
     def send_coordinates(self):
         # if text is inalid, warn user
